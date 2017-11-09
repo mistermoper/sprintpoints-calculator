@@ -1,0 +1,130 @@
+<html>
+<head>
+<script src="https://unpkg.com/vue"></script>
+<script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href="./styles.css">
+</head>
+<body>
+	<h1> Sprint points calculator</h1>
+	<h2>Sprint points calculate made easy</h2>
+	<div id="app">
+		<header>
+		<div class="summary">
+		  	<span class="section-label section-label--sumary">Summary</span>
+		  	<ul class="totals">
+		  		<span class="total-formula">(Hours - 1) * Days - sprint	- training	- incidences * Days</span>
+			  	<ul class="total-person" v-for="person in persons" v-if="person.days > 0">
+			  	 <li>
+			  	 <span class="name"><strong>{{person.name}}: </strong></span>
+			  	(8 - 1) * {{person.days}} - {{person.sprint}} - {{person.training}} - {{person.unexpected}} =
+			  	{{getPersonTotal(person)}}</li>
+			  	</ul>
+		  	</ul>
+		  	<span class="section-label section-label--total-points">
+		  		<strong>Total points:</strong>
+		  	</span>
+		  	<span class="total-points">
+	  			{{getTotal()}}
+		  	</span>
+        </div>
+        <div class="burdown">	
+		  	<span class="section-label section-label--burndown">Burndown</span>
+<form action="http://www.burndowngenerator.com/burndown" method="post" id="burndown_form">
+<p><label for="YABOG_days">Days: </label><input type="text" id="YABOG_days" name="YABOG[days]" size="4" v-model="getDays()"></p>
+<p><label for="YABOG_points">Points: </label><input type="text" id="YABOG_points" name="YABOG[points]" size="4" v-model="getTotal()"></p>
+<p><label for="YABOG_title">Title: </label><input type="text" id="YABOG_title" name="YABOG[title]" size="50" value="Sprint"></p>
+
+<p class="create-burndown"><input type="submit" value="Create burndown chart!"></p>
+
+<fieldset class="element-invisible">
+<legend>Customize your burndown with these options (not required)</legend>
+<div class="more-options">
+<div class="option"><label for="YABOG_xlabel">X label: </label><input type="text" id="YABOG_xlabel" name="YABOG[xlabel]" value=""></div>
+<div class="option"><label for="YABOG_ylabel">Y label: </label><input type="text" id="YABOG_ylabel" name="YABOG[ylabel]" value=""></div>
+<div class="option"><label for="YABOG_hide_speed">Hide speed: </label><div class="iPhoneCheckContainer"><input type="checkbox" id="YABOG_hide_speed" name="YABOG[hide_speed]" style="visibility: hidden; zoom: 1; opacity: 0;"><div class="iPhoneCheckHandle"><div class="iPhoneCheckHandleBG" style="left: 0px;"></div><div class="iPhoneCheckHandleSlider"></div></div><label class="iPhoneCheckLabelOff">OFF</label><label class="iPhoneCheckLabelOn" style="visibility: hidden; zoom: 1; opacity: 0;">ON</label></div></div>
+<div class="option"><label for="YABOG_hide_grid">Hide grid: </label><div class="iPhoneCheckContainer"><input type="checkbox" id="YABOG_hide_grid" name="YABOG[hide_grid]" style="visibility: hidden; zoom: 1; opacity: 0;"><div class="iPhoneCheckHandle"><div class="iPhoneCheckHandleBG" style="left: 0px;"></div><div class="iPhoneCheckHandleSlider"></div></div><label class="iPhoneCheckLabelOff">OFF</label><label class="iPhoneCheckLabelOn" style="visibility: hidden; zoom: 1; opacity: 0;">ON</label></div></div>
+<div class="option"><label for="YABOG_burndown_color">Burndown line color: </label><input type="text" id="YABOG_burndown_color" name="YABOG[burndown_color]" value="#000000" size="6"></div>
+<div class="option">
+	<label for="YABOG_page_size">Paper size: </label>
+	<select id="YABOG_page_size" name="YABOG[page_size]">
+		<option value="a0">A0</option>
+		<option value="a1">A1</option>
+		<option value="a2">A2</option>
+		<option value="a3">A3</option>
+		<option value="a4" selected="selected">A4</option>
+		<option value="a5">A5</option>
+		<option value="a6">A6</option>
+		<option value="letter">Letter</option>
+		<option value="legal">Legal</option>
+		<option value="executive">Executive</option>
+		<option value="folio">Folio</option>
+	</select>
+</div>
+<div class="option">
+	<label for="YABOG_chart_type">Chart type: </label>
+	<select id="YABOG_chart_type" name="YABOG[chart_type]">
+		<option value="burndown" selected="selected">Burndown</option>
+		<option value="burnup">Burnup</option>
+	</select>
+</div>
+</div>
+</fieldset>
+
+</form>
+        </div>
+       </header>
+       <h2>Team</h2>
+	  <div class="persons-form">
+	  	<div class="person" v-for="(person, index) in persons">
+	  	  <div class="person-name">{{persons[index].name}}</div>
+		  <div class="form-item name">
+		  	<div class="label">
+		  		<label for="name">Name</label>
+		  	</div>
+		  	<div class="form-item-input">
+		  		<input type="text" name="name" v-model="persons[index].name">
+		  	</div>
+		  </div>
+		  <div class="form-item days">
+		  	<div class="label">
+		  		<label for="days">Number of days</label>
+		  	</div>
+	  		<div class="form-item-input">
+		  		<input type="text" name="days" v-model="persons[index].days">
+		  	</div>
+		  </div>
+		  <div class="form-item sprint">
+		  	<div class="label">
+		  		<label for="sprint">Sprint weekly hours</label>
+		  	</div>
+	  		<div class="form-item-input">
+		  		<input type="text" name="sprint" v-model="persons[index].sprint">
+		  	</div>
+		  </div>
+		  <div class="form-item training">
+		  	<div class="label">
+		  		<label for="persons">Training hours</label>
+		  	</div>
+		  	<div class="form-item-input">
+		  		<input type="text" name="training" v-model="persons[index].training">
+		  	</div>
+		  </div>
+		  <div class="form-item unexpected">
+		  	<div class="label">
+		  		<label for="unexpected">Unexpected time reserved</label>
+		  	</div>
+		  	<div class="form-item-input">
+		  		<input type="text" name="unexpected" v-model="persons[index].unexpected">
+		  	</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<script src="./coffee.js"></script>
+	<script src="./script.js"></script>
+
+</body>
+</html>

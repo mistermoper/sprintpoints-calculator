@@ -1,0 +1,61 @@
+* {
+	box-sizing: border-box;
+}
+
+header {
+	display: flex;
+	  flex-wrap: wrap;
+	  align-items: stretch;
+}
+header > div {
+	width: 50%;
+}
+
+.element-invisible {
+	display: none;
+}
+
+ul {
+	list-style: none;
+}
+
+span.section-label {
+	font-weight: bold;
+	font-size: 24px;
+}
+
+.summary {
+	padding-left: 10em;
+}
+
+.total-formula {
+	font-weight: bold;
+    font-size: 18px;
+}
+
+span.section-label.section-label--total-points {
+	font-size: 20px;
+}
+
+.persons-form {
+	display: flex;
+	  flex-wrap: wrap;
+	  align-items: stretch;
+}
+.persons-form .person {
+	padding: 1em;
+	width: 32%;
+	border: 1px solid black;
+	margin-left: 1em;
+	margin-top: 1em;
+}
+div.person-name {
+	font-weight: bold;
+	font-size: 20px;
+}
+
+
+.persons-form .person .form-item > div {
+	display: inline-block;
+	width: 200px;
+}
